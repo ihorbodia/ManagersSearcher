@@ -69,7 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ManagerSearcherCommon.cs" />
-    <Compile Include="ManagerSearcherLogic.cs" />
+    <Compile Include="ManagerSearcherProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
