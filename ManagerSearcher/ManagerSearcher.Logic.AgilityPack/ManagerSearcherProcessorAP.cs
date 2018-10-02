@@ -1,22 +1,23 @@
-﻿using NPOI.SS.UserModel;
+﻿using HtmlAgilityPack;
+using ManagerSearcher.Common;
+using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System;
+using System.Diagnostics;
 using System.IO;
-using WatiN.Core;
-using SHDocVw;
-using ManagerSearcher.Common;
+using System.Linq;
 
-namespace ManagerSearcher.Logic
+namespace ManagerSearcher.Logic.AgilityPack
 {
-    public class ManagerSearcherProcessor 
+    public class ManagerSearcherProcessorAP
     {
         ISheet managersDataSheet;
         String excelFileName;
         String excelFilePath;
         IWorkbook excelWorkBook;
 
-        public ManagerSearcherProcessor(string filePath)
-        { 
+        public ManagerSearcherProcessorAP(string filePath)
+        {
             if (filePath.Contains("xlsx#"))
             {
                 Console.WriteLine("File Error");
@@ -75,25 +76,26 @@ namespace ManagerSearcher.Logic
             {
                 return false;
             }
-            
-            IWebBrowser wb = new SHDocVw.WebBrowser();
-            Settings.AutoStartDialogWatcher = false;
-            using (IE ie = new IE())
-            {
-                ie.AutoClose = true;
-                ie.Visible = false;
-                
-                ie.GoTo(URL);
+            var html = "https://www." + URL;
+            HtmlWeb web = new HtmlWeb();
 
-                SiteModel sm = new SiteModel(
-                    ie.Table(Find.ById("MR37N2-S-GB").And(Find.ByClass("nfvtTab linkTabBl"))),
-                    ie.Table(Find.ByClass("tabElemNoBor overfH"))
+            var htmlDoc = web.Load(html);
+            var desc = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='std_txt' and @align='justify']");
+            string description = desc.InnerHtml.Substring(desc.InnerHtml.LastIndexOf('>') + 1);
+            Console.WriteLine(description);
+
+            var shareHolders = htmlDoc.DocumentNode.SelectNodes("//table[@class='nfvtTab linkTabBl']")
+                .FirstOrDefault(x => x.Attributes.Count > 5)
+                .ChildNodes.Where(x => x.Name == "tr" && x.PreviousSibling.Name == "tr")
+                .Select(x => x.ChildNodes.Where(y => y.Name == "td").FirstOrDefault().InnerText.Trim());
+            SiteModelAG sm = new SiteModelAG(
+                    shareHolders,
+                    description
                     );
-                return isSiteContainsName(sm, middleName) || isSiteContainsName(sm, surname);
-            }
+            return isSiteContainsName(sm, middleName) || isSiteContainsName(sm, surname);
         }
 
-        private bool isSiteContainsName(SiteModel sm, string name)
+        private bool isSiteContainsName(SiteModelAG sm, string name)
         {
             bool result = false;
             if (sm.DescriptionSentence.Contains(name))

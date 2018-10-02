@@ -2,7 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ManagerSearcher.Common;
 using ManagerSearcher.Logic;
+using ManagerSearcher.Logic.AgilityPack;
 
 namespace ManagerSearcherMainGUI
 {
@@ -55,7 +57,7 @@ namespace ManagerSearcherMainGUI
         }
         private void RunProgram()
         {
-            ManagerSearcherProcessor ms = new ManagerSearcherProcessor(chosenPath);
+            ManagerSearcherProcessorAP ms = new ManagerSearcherProcessorAP(chosenPath);
             ms.ProcessFile();
             ms.SaveFile();
         }

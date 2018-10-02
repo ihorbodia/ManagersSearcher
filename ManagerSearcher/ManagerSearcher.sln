@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagerSearcher", "ManagerS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagerSearcher.Logic", "ManagerSearcherLogic\ManagerSearcher.Logic.csproj", "{C5F90DA2-66B0-4140-9CC9-ED9A4D7B5FBA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagerSearcher.Logic.AgilityPack", "ManagerSearcher.Logic.AgilityPack\ManagerSearcher.Logic.AgilityPack.csproj", "{92ABF03D-D8F7-4347-B6D8-A5A5AF54AB65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagerSearcher.Common", "ManagerSearcher.Common\ManagerSearcher.Common.csproj", "{D1D65F4D-FFCC-4F59-B696-790DBE5C6A32}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{C5F90DA2-66B0-4140-9CC9-ED9A4D7B5FBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5F90DA2-66B0-4140-9CC9-ED9A4D7B5FBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5F90DA2-66B0-4140-9CC9-ED9A4D7B5FBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92ABF03D-D8F7-4347-B6D8-A5A5AF54AB65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92ABF03D-D8F7-4347-B6D8-A5A5AF54AB65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92ABF03D-D8F7-4347-B6D8-A5A5AF54AB65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92ABF03D-D8F7-4347-B6D8-A5A5AF54AB65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1D65F4D-FFCC-4F59-B696-790DBE5C6A32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1D65F4D-FFCC-4F59-B696-790DBE5C6A32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1D65F4D-FFCC-4F59-B696-790DBE5C6A32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1D65F4D-FFCC-4F59-B696-790DBE5C6A32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
