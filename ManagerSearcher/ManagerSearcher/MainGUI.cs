@@ -42,7 +42,6 @@ namespace ManagerSearcherMainGUI
                 new Task(() =>
                 {
                     Thread t = new Thread(RunProgram);
-                    t.SetApartmentState(ApartmentState.STA);
                     t.Start();
                     t.Join();
                     StatusLabelText.BeginInvoke((MethodInvoker)delegate () { StatusLabelText.Text = "Finish"; });
@@ -53,12 +52,13 @@ namespace ManagerSearcherMainGUI
             {
                 StatusLabelText.Text = "Something wrong";
             }
+           
             ProcessFilesButton.Enabled = true;
         }
         private void RunProgram()
         {
             ManagerSearcherProcessorAP ms = new ManagerSearcherProcessorAP(chosenPath);
-            ms.ProcessFile();
+            ms.ProcessFile().GetAwaiter().GetResult();
             ms.SaveFile();
         }
     }

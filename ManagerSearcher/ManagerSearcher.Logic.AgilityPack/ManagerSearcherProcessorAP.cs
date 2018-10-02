@@ -6,6 +6,8 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ManagerSearcher.Logic.AgilityPack
 {
@@ -36,7 +38,7 @@ namespace ManagerSearcher.Logic.AgilityPack
             }
         }
 
-        public void ProcessFile()
+        public async Task ProcessFile()
         {
             for (int row = 1; row <= managersDataSheet.LastRowNum; row++)
             {
@@ -49,15 +51,17 @@ namespace ManagerSearcher.Logic.AgilityPack
                 string middlename = data[0];
                 string surname = data[1];
                 string URL = rowData.GetCell(3).StringCellValue;
-
-                if (isNFF(middlename, surname, URL))
+                await Task.Run(() =>
                 {
-                    rowData.GetCell(5).SetCellValue("NFF");
-                }
-                else
-                {
-                    rowData.GetCell(5).SetCellValue("FF");
-                }
+                    if (isNFF(middlename, surname, URL))
+                    {
+                        rowData.GetCell(5).SetCellValue("NFF");
+                    }
+                    else
+                    {
+                        rowData.GetCell(5).SetCellValue("FF");
+                    }
+                });
             }
         }
         public void SaveFile()
@@ -82,12 +86,13 @@ namespace ManagerSearcher.Logic.AgilityPack
             var htmlDoc = web.Load(html);
             var desc = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='std_txt' and @align='justify']");
             string description = desc.InnerHtml.Substring(desc.InnerHtml.LastIndexOf('>') + 1);
-            Console.WriteLine(description);
+            Debug.WriteLine(description);
 
             var shareHolders = htmlDoc.DocumentNode.SelectNodes("//table[@class='nfvtTab linkTabBl']")
                 .FirstOrDefault(x => x.Attributes.Count > 5)
                 .ChildNodes.Where(x => x.Name == "tr" && x.PreviousSibling.Name == "tr")
                 .Select(x => x.ChildNodes.Where(y => y.Name == "td").FirstOrDefault().InnerText.Trim());
+            Debug.WriteLine(shareHolders);
             SiteModelAG sm = new SiteModelAG(
                     shareHolders,
                     description
