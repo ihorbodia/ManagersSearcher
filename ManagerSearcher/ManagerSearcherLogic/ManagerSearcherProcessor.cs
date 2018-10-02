@@ -58,11 +58,11 @@ namespace ManagerSearcher.Logic
 
                 if (isNFF(middlename, surname, URL))
                 {
-                    rowData.GetCell(4).SetCellValue("NFF");
+                    rowData.GetCell(5).SetCellValue("NFF");
                 }
                 else
                 {
-                    rowData.GetCell(4).SetCellValue("FF");
+                    rowData.GetCell(5).SetCellValue("FF");
                 }
             }
         }
