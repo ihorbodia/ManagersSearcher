@@ -34,6 +34,7 @@ namespace ManagerSearcherMainGUI
                 return;
             }
             StatusLabelText.Text = "Processing";
+            ProcessFilesButton.Enabled = false;
             try
             {
                 new Task(() =>
@@ -50,6 +51,7 @@ namespace ManagerSearcherMainGUI
             {
                 StatusLabelText.Text = "Something wrong";
             }
+            ProcessFilesButton.Enabled = true;
         }
         private void RunProgram()
         {

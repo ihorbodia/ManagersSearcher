@@ -71,6 +71,7 @@
     <Compile Include="ManagerSearcherCommon.cs" />
     <Compile Include="ManagerSearcherProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SiteModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

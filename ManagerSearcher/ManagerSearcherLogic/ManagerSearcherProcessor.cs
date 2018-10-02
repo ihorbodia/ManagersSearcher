@@ -44,16 +44,25 @@ namespace ManagerSearcher.Logic
 
         public void ProcessFile()
         {
-            for (int row = 1; row <= 4; row++) 
+            for (int row = 1; row <= managersDataSheet.LastRowNum; row++)
             {
                 IRow rowData = managersDataSheet.GetRow(row);
-                if (!string.IsNullOrEmpty(rowData.GetCell(2).StringCellValue))
+                if (string.IsNullOrEmpty(rowData.GetCell(2).StringCellValue))
                 {
-                    var data = ManagerSearcherCommon.GetMiddleAndSurname(rowData.GetCell(2).StringCellValue).Split(',');
-                    string middlename = data[0];
-                    string surname = data[1];
-                    string URL = rowData.GetCell(3).StringCellValue;
-                    ProcessManager(middlename, surname, URL);
+                    break;
+                }
+                var data = ManagerSearcherCommon.GetMiddleAndSurname(rowData.GetCell(2).StringCellValue).Split(',');
+                string middlename = data[0];
+                string surname = data[1];
+                string URL = rowData.GetCell(3).StringCellValue;
+
+                if (isNFF(middlename, surname, URL))
+                {
+                    rowData.GetCell(4).SetCellValue("NFF");
+                }
+                else
+                {
+                    rowData.GetCell(4).SetCellValue("FF");
                 }
             }
         }
@@ -67,35 +76,45 @@ namespace ManagerSearcher.Logic
             }
         }
 
-        private void ProcessManager(string middleName, string surname, string URL)
+        private bool isNFF(string middleName, string surname, string URL)
         {
             if (string.IsNullOrEmpty(middleName) || string.IsNullOrEmpty(surname))
             {
-                return;
+                return false;
             }
-            IE ie = null;
+            
             IWebBrowser wb = new SHDocVw.WebBrowser();
             Settings.AutoStartDialogWatcher = false;
-            ie = new IE(wb);
-            try
+            using (IE ie = new IE())
             {
-                ie = new IE();
+                ie.AutoClose = true;
+                ie.Visible = false;
+                
+                ie.GoTo(URL);
+
+                SiteModel sm = new SiteModel(
+                    ie.Table(Find.ById("MR37N2-S-GB").And(Find.ByClass("nfvtTab linkTabBl"))),
+                    ie.Table(Find.ByClass("tabElemNoBor overfH"))
+                    );
+                return isSiteContainsName(sm, middleName) || isSiteContainsName(sm, surname);
             }
-            catch (Exception ex)
+        }
+
+        private bool isSiteContainsName(SiteModel sm, string name)
+        {
+            bool result = false;
+            if (sm.DescriptionSentence.Contains(name))
             {
-                Debug.WriteLine(ex.Message);
+                return true;
             }
-
-            ie.AutoClose = true;
-            ie.Visible = true;
-
-            ie.GoTo(URL);
-
-            var table = ie.Table(Find.ById("MR37N2-S-GB").And(Find.ByClass("nfvtTab linkTabBl")));
-            foreach (var row in table.TableRows)
+            foreach (var item in sm.ShareholderValues)
             {
-                Debug.WriteLine(row);
+                if (item.Contains(name))
+                {
+                    return true;
+                }
             }
+            return result;
         }
     }
 }
