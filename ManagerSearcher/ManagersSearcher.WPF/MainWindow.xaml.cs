@@ -1,20 +1,36 @@
-﻿using System;
+﻿using ManagerSearcher.Logic;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using ManagerSearcher.Logic;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using System.Windows.Threading;
 
-namespace ManagerSearcherMainGUI
+namespace ManagersSearcher.WPF
 {
-    public partial class MainGUI : Form
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
     {
         string chosenPath = string.Empty;
-        public MainGUI()
+        public MainWindow()
         {
             InitializeComponent();
-            StatusLabelText.Text = "Choose folder";
-            Text = "Manager searcher v1.0";
-            FormBorderStyle = FormBorderStyle.FixedSingle;
+            InitializeComponent();
+            StatusLabelText.Content = "Choose file";
+            this.Title = "Manager searcher v1.0";
+            this.ResizeMode = ResizeMode.NoResize;
         }
 
         private void ChooseFirstFolderButton_Click(object sender, System.EventArgs e)
@@ -22,8 +38,8 @@ namespace ManagerSearcherMainGUI
             chosenPath = ManagerSearcherCommon.SelectFile();
             if (!string.IsNullOrEmpty(chosenPath.Trim()))
             {
-                StatusLabelText.Text = "Start process";
-                ChoosenPathLabel.Text = chosenPath;
+                StatusLabelText.Content = "Start process";
+                ChoosenPathLabel.Content = chosenPath;
             }
         }
 
@@ -33,7 +49,7 @@ namespace ManagerSearcherMainGUI
             {
                 return;
             }
-            StatusLabelText.Text = "Processing";
+            StatusLabelText.Content = "Processing";
             try
             {
                 new Task(() =>
@@ -42,15 +58,16 @@ namespace ManagerSearcherMainGUI
                     t.SetApartmentState(ApartmentState.STA);
                     t.Start();
                     t.Join();
-                    StatusLabelText.BeginInvoke((MethodInvoker)delegate () { StatusLabelText.Text = "Finish"; });
+                    StatusLabelText.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate () { StatusLabelText.Content = "Finish"; });
                     Console.WriteLine("Finish");
                 }).Start();
             }
             catch (Exception)
             {
-                StatusLabelText.Text = "Something wrong";
+                StatusLabelText.Content = "Something wrong";
             }
         }
+        [STAThread]
         private void RunProgram()
         {
             ManagerSearcherProcessor ms = new ManagerSearcherProcessor(chosenPath);

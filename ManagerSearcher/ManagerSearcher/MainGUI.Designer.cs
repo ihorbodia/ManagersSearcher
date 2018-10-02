@@ -87,7 +87,7 @@
             this.ChooseFirstFolderButton.Name = "ChooseFirstFolderButton";
             this.ChooseFirstFolderButton.Size = new System.Drawing.Size(107, 23);
             this.ChooseFirstFolderButton.TabIndex = 7;
-            this.ChooseFirstFolderButton.Text = "Choose folder";
+            this.ChooseFirstFolderButton.Text = "Choose file";
             this.ChooseFirstFolderButton.UseVisualStyleBackColor = true;
             this.ChooseFirstFolderButton.Click += new System.EventHandler(this.ChooseFirstFolderButton_Click);
             // 
