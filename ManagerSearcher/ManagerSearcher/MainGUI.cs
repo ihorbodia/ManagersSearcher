@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ManagerSearcher.Common;
-using ManagerSearcher.Logic;
 using ManagerSearcher.Logic.AgilityPack;
 
 namespace ManagerSearcherMainGUI
@@ -15,7 +14,7 @@ namespace ManagerSearcherMainGUI
         {
             InitializeComponent();
             StatusLabelText.Text = "Choose folder";
-            Text = "Manager searcher v1.0";
+            Text = "Manager searcher v1.1";
             FormBorderStyle = FormBorderStyle.FixedSingle;
         }
 

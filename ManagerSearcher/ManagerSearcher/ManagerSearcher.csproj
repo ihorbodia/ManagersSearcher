@@ -118,10 +118,6 @@
       <Project>{92ABF03D-D8F7-4347-B6D8-A5A5AF54AB65}</Project>
       <Name>ManagerSearcher.Logic.AgilityPack</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ManagerSearcherLogic\ManagerSearcher.Logic.csproj">
-      <Project>{c5f90da2-66b0-4140-9cc9-ed9a4d7b5fba}</Project>
-      <Name>ManagerSearcher.Logic</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="256_256_f86ca6f98affc4bfe9306d9693638920_L6x_icon.ico" />

@@ -76,10 +76,6 @@
       <Project>{D1D65F4D-FFCC-4F59-B696-790DBE5C6A32}</Project>
       <Name>ManagerSearcher.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ManagerSearcherLogic\ManagerSearcher.Logic.csproj">
-      <Project>{c5f90da2-66b0-4140-9cc9-ed9a4d7b5fba}</Project>
-      <Name>ManagerSearcher.Logic</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

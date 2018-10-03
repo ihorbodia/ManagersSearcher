@@ -1,14 +1,11 @@
 ﻿using HtmlAgilityPack;
 using ManagerSearcher.Common;
-using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace ManagerSearcher.Logic.AgilityPack
@@ -111,14 +108,14 @@ namespace ManagerSearcher.Logic.AgilityPack
             string description = desc.InnerHtml.Substring(desc.InnerHtml.LastIndexOf('>') + 1);
             Debug.WriteLine(description);
 
-            var shareHolders = htmlDoc.DocumentNode.SelectNodes("//table[@class='nfvtTab linkTabBl']").FirstOrDefault(x => x.Attributes.Count > 5);
+            var managers = htmlDoc.DocumentNode.SelectNodes("//table[@class='nfvtTab linkTabBl']").FirstOrDefault(x => x.Attributes.Count < 5);
             IEnumerable<string> data = null;
-            if (shareHolders != null)
+            if (managers != null)
             {
-                data = shareHolders.ChildNodes.Where(x => x.Name == "tr" && x.PreviousSibling.Name == "tr")
+                data = managers.ChildNodes.Where(x => x.Name == "tr" && x.PreviousSibling.Name == "tr")
                 .Select(x => x.ChildNodes.Where(y => y.Name == "td").FirstOrDefault().InnerText.Trim());
             }
-            Debug.WriteLine(shareHolders);
+            Debug.WriteLine(managers);
             SiteModelAG sm = new SiteModelAG(
                     data,
                     description
