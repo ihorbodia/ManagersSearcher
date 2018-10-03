@@ -29,10 +29,16 @@ namespace ManagerSearcher.Common
                 return string.Empty;
             }
             var res = data.Trim().Split(' ');
-            if (res.Length > 0)
+            if (res.Length > 1)
             {
                 string surName = res[res.Length - 1];
                 string middleName = res[res.Length - 2];
+                return middleName + "," + surName;
+            }
+            else if (res.Length  == 1)
+            {
+                string surName = res[res.Length - 1];
+                string middleName = string.Empty;
                 return middleName + "," + surName;
             }
             return string.Empty;

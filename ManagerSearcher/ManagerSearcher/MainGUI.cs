@@ -52,14 +52,12 @@ namespace ManagerSearcherMainGUI
             {
                 StatusLabelText.Text = "Something wrong";
             }
-           
             ProcessFilesButton.Enabled = true;
         }
         private void RunProgram()
         {
             ManagerSearcherProcessorAP ms = new ManagerSearcherProcessorAP(chosenPath);
-            ms.ProcessFile().GetAwaiter().GetResult();
-            ms.SaveFile();
+            ms.ProcessFileByEpp();
         }
     }
 }

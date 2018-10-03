@@ -13,8 +13,8 @@ namespace ManagerSearcher.Common
             if (list != null)
             {
                 ShareholderValues = new List<string>(list);
-                DescriptionSentence = description;
             }
+            DescriptionSentence = description;
         }
     }
 }

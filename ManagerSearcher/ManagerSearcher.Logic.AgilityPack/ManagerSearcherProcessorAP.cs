@@ -2,7 +2,9 @@
 using ManagerSearcher.Common;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using OfficeOpenXml;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -18,6 +20,8 @@ namespace ManagerSearcher.Logic.AgilityPack
         String excelFilePath;
         IWorkbook excelWorkBook;
 
+        List<Task> tasks;
+
         public ManagerSearcherProcessorAP(string filePath)
         {
             if (filePath.Contains("xlsx#"))
@@ -26,19 +30,20 @@ namespace ManagerSearcher.Logic.AgilityPack
             }
             else
             {
-                using (FileStream file = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite))
-                {
-                    excelWorkBook = new XSSFWorkbook(file);
-                    excelWorkBook.MissingCellPolicy = MissingCellPolicy.CREATE_NULL_AS_BLANK;
-                    managersDataSheet = excelWorkBook.GetSheetAt(0);
+                tasks = new List<Task>();
+                //using (FileStream file = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite))
+                //{
+                //    excelWorkBook = new XSSFWorkbook(file);
+                //    excelWorkBook.MissingCellPolicy = MissingCellPolicy.CREATE_NULL_AS_BLANK;
+                //    managersDataSheet = excelWorkBook.GetSheetAt(0);
                     excelFileName = new FileInfo(filePath).Name;
                     excelFilePath = new FileInfo(filePath).FullName;
-                    file.Close();
-                }
+                    //file.Close();
+               // }
             }
         }
 
-        public async Task ProcessFile()
+        public void ProcessFile()
         {
             for (int row = 1; row <= managersDataSheet.LastRowNum; row++)
             {
@@ -51,19 +56,65 @@ namespace ManagerSearcher.Logic.AgilityPack
                 string middlename = data[0];
                 string surname = data[1];
                 string URL = rowData.GetCell(3).StringCellValue;
-                await Task.Run(() =>
+                tasks.Add(Task.Factory.StartNew(()=>
+                    {
+                        if (isNFF(middlename, surname, URL))
+                        {
+                            rowData.GetCell(5).SetCellValue("NFF");
+                        }
+                        else
+                        {
+                            rowData.GetCell(5).SetCellValue("FF");
+                        }
+                    }
+                ));
+            }
+            Task.WaitAll(tasks.ToArray());
+        }
+
+        public void ProcessFileByEpp()
+        {
+            FileInfo fi = new FileInfo(excelFilePath);
+            if (fi.Exists)
+            {
+                using (ExcelPackage p = new ExcelPackage(fi))
                 {
-                    if (isNFF(middlename, surname, URL))
+                    ExcelWorksheet workSheet = p.Workbook.Worksheets["Feuil1"];
+                    var start = workSheet.Dimension.Start.Row + 1;
+                    var end = workSheet.Dimension.End.Row;
+                    for (int row = start; row <= end; row++)
                     {
-                        rowData.GetCell(5).SetCellValue("NFF");
+                        string names = workSheet.Cells[row, 3].Text;
+                        string URL = workSheet.Cells[row, 4].Text;
+                        if (string.IsNullOrEmpty(names))
+                        {
+                            break;
+                        }
+                        var data = ManagerSearcherCommon.GetMiddleAndSurname(names).Split(',');
+                        string middlename = data[0];
+                        string surname = data[1];
+                        object arg = row;
+                        tasks.Add(Task.Factory.StartNew(new Action<object>((argValue) =>
+                        {
+                            int num = Convert.ToInt32(argValue);
+                            Debug.WriteLine(num);
+                            if (isNFF(middlename, surname, URL))
+                            {
+                                workSheet.Cells[num, 6].Value = "NFF";
+                            }
+                            else
+                            {
+                                workSheet.Cells[num, 6].Value = "FF";
+                            }
+                        }), arg));
+                        
                     }
-                    else
-                    {
-                        rowData.GetCell(5).SetCellValue("FF");
-                    }
-                });
+                    Task.WaitAll(tasks.ToArray());
+                    p.Save();
+                }
             }
         }
+
         public void SaveFile()
         {
             using (var saveFile = new FileStream(excelFilePath, FileMode.Create, FileAccess.Write))
@@ -80,21 +131,44 @@ namespace ManagerSearcher.Logic.AgilityPack
             {
                 return false;
             }
-            var html = "https://www." + URL;
+            string html = string.Empty;
+            if (!URL.Contains("https://www."))
+            {
+                html = "https://www." + URL;
+            }
+            else
+            {
+                html = URL;
+            }
+            
             HtmlWeb web = new HtmlWeb();
-
-            var htmlDoc = web.Load(html);
+            HtmlDocument htmlDoc = null;
+            try
+            {
+                htmlDoc = web.Load(html);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+            if (htmlDoc == null)
+            {
+                return false;
+            }
             var desc = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='std_txt' and @align='justify']");
             string description = desc.InnerHtml.Substring(desc.InnerHtml.LastIndexOf('>') + 1);
             Debug.WriteLine(description);
 
-            var shareHolders = htmlDoc.DocumentNode.SelectNodes("//table[@class='nfvtTab linkTabBl']")
-                .FirstOrDefault(x => x.Attributes.Count > 5)
-                .ChildNodes.Where(x => x.Name == "tr" && x.PreviousSibling.Name == "tr")
+            var shareHolders = htmlDoc.DocumentNode.SelectNodes("//table[@class='nfvtTab linkTabBl']").FirstOrDefault(x => x.Attributes.Count > 5);
+            IEnumerable<string> data = null;
+            if (shareHolders != null)
+            {
+                data = shareHolders.ChildNodes.Where(x => x.Name == "tr" && x.PreviousSibling.Name == "tr")
                 .Select(x => x.ChildNodes.Where(y => y.Name == "td").FirstOrDefault().InnerText.Trim());
+            }
             Debug.WriteLine(shareHolders);
             SiteModelAG sm = new SiteModelAG(
-                    shareHolders,
+                    data,
                     description
                     );
             return isSiteContainsName(sm, middleName) || isSiteContainsName(sm, surname);
@@ -107,11 +181,14 @@ namespace ManagerSearcher.Logic.AgilityPack
             {
                 return true;
             }
-            foreach (var item in sm.ShareholderValues)
+            if (sm.ShareholderValues != null)
             {
-                if (item.Contains(name))
+                foreach (var item in sm.ShareholderValues)
                 {
-                    return true;
+                    if (item.Contains(name))
+                    {
+                        return true;
+                    }
                 }
             }
             return result;
