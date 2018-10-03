@@ -15,10 +15,8 @@ namespace ManagerSearcher.Logic.AgilityPack
 {
     public class ManagerSearcherProcessorAP
     {
-        ISheet managersDataSheet;
         String excelFileName;
         String excelFilePath;
-        IWorkbook excelWorkBook;
 
         List<Task> tasks;
 
@@ -31,45 +29,9 @@ namespace ManagerSearcher.Logic.AgilityPack
             else
             {
                 tasks = new List<Task>();
-                //using (FileStream file = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite))
-                //{
-                //    excelWorkBook = new XSSFWorkbook(file);
-                //    excelWorkBook.MissingCellPolicy = MissingCellPolicy.CREATE_NULL_AS_BLANK;
-                //    managersDataSheet = excelWorkBook.GetSheetAt(0);
-                    excelFileName = new FileInfo(filePath).Name;
-                    excelFilePath = new FileInfo(filePath).FullName;
-                    //file.Close();
-               // }
+                excelFileName = new FileInfo(filePath).Name;
+                excelFilePath = new FileInfo(filePath).FullName;
             }
-        }
-
-        public void ProcessFile()
-        {
-            for (int row = 1; row <= managersDataSheet.LastRowNum; row++)
-            {
-                IRow rowData = managersDataSheet.GetRow(row);
-                if (string.IsNullOrEmpty(rowData.GetCell(2).StringCellValue))
-                {
-                    break;
-                }
-                var data = ManagerSearcherCommon.GetMiddleAndSurname(rowData.GetCell(2).StringCellValue).Split(',');
-                string middlename = data[0];
-                string surname = data[1];
-                string URL = rowData.GetCell(3).StringCellValue;
-                tasks.Add(Task.Factory.StartNew(()=>
-                    {
-                        if (isNFF(middlename, surname, URL))
-                        {
-                            rowData.GetCell(5).SetCellValue("NFF");
-                        }
-                        else
-                        {
-                            rowData.GetCell(5).SetCellValue("FF");
-                        }
-                    }
-                ));
-            }
-            Task.WaitAll(tasks.ToArray());
         }
 
         public void ProcessFileByEpp()
@@ -112,16 +74,6 @@ namespace ManagerSearcher.Logic.AgilityPack
                     Task.WaitAll(tasks.ToArray());
                     p.Save();
                 }
-            }
-        }
-
-        public void SaveFile()
-        {
-            using (var saveFile = new FileStream(excelFilePath, FileMode.Create, FileAccess.Write))
-            {
-                excelWorkBook.Write(saveFile);
-                saveFile.Close();
-                excelWorkBook.Close();
             }
         }
 

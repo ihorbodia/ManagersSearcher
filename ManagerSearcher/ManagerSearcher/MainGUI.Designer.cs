@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainGUI));
             this.ChoosenPathLabel = new System.Windows.Forms.Label();
             this.FolderChosenPath = new System.Windows.Forms.Label();
             this.StatusLabelText = new System.Windows.Forms.Label();
@@ -102,6 +103,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.ProcessFilesButton);
             this.Controls.Add(this.ChooseFirstFolderButton);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainGUI";
             this.Text = "Form1";
             this.ResumeLayout(false);
