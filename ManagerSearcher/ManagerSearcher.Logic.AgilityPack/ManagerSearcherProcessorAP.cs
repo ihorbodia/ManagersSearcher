@@ -7,6 +7,7 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace ManagerSearcher.Logic.AgilityPack
@@ -84,7 +85,7 @@ namespace ManagerSearcher.Logic.AgilityPack
 
         private bool isNFF(string middleName, string surname, string URL)
         {
-            if (string.IsNullOrEmpty(middleName) || string.IsNullOrEmpty(surname))
+            if (string.IsNullOrEmpty(surname))
             {
                 return false;
             }
@@ -98,11 +99,17 @@ namespace ManagerSearcher.Logic.AgilityPack
                 html = URL;
             }
             
-            HtmlWeb web = new HtmlWeb();
+            Encoding iso = Encoding.GetEncoding("iso-8859-1");
+            HtmlWeb web = new HtmlWeb()
+            {
+                AutoDetectEncoding = false,
+                OverrideEncoding = iso,
+            };
             HtmlDocument htmlDoc = null;
             try
             {
                 htmlDoc = web.Load(html);
+                var encoding = htmlDoc.Encoding;
             }
             catch (Exception ex)
             {
@@ -129,6 +136,7 @@ namespace ManagerSearcher.Logic.AgilityPack
                     data,
                     description
                     );
+
             if (searchByMiddles)
             {
                 return isSiteContainsName(sm, middleName) || isSiteContainsName(sm, surname);
@@ -139,6 +147,10 @@ namespace ManagerSearcher.Logic.AgilityPack
         private bool isSiteContainsName(SiteModelAG sm, string name)
         {
             bool result = false;
+            if (string.IsNullOrEmpty(name))
+            {
+                return false;
+            }
             if (sm.DescriptionSentence.ToUpper().Contains(name.ToUpper()))
             {
                 return true;

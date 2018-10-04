@@ -59,13 +59,13 @@ namespace ManagerSearcher.Common
             }
             data = RemoveThrash(data);
             var res = data.Trim().Split(' ');
-            if (res.Length > 1)
+            if (res.Length > 2)
             {
                 string surName = res[res.Length - 1];
                 string middleName = res[res.Length - 2];
                 return middleName + "," + surName;
             }
-            else if (res.Length  == 1)
+            else if (res.Length == 1 || res.Length == 2)
             {
                 string surName = res[res.Length - 1];
                 string middleName = string.Empty;
