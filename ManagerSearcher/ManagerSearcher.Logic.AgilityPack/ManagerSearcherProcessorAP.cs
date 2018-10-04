@@ -139,7 +139,7 @@ namespace ManagerSearcher.Logic.AgilityPack
         private bool isSiteContainsName(SiteModelAG sm, string name)
         {
             bool result = false;
-            if (sm.DescriptionSentence.Contains(name))
+            if (sm.DescriptionSentence.ToUpper().Contains(name.ToUpper()))
             {
                 return true;
             }
@@ -147,7 +147,7 @@ namespace ManagerSearcher.Logic.AgilityPack
             {
                 foreach (var item in sm.ShareholderValues)
                 {
-                    if (item.Contains(name))
+                    if (item.ToUpper().Contains(name.ToUpper()))
                     {
                         return true;
                     }
