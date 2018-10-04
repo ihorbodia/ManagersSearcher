@@ -3,6 +3,7 @@ using System;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace ManagerSearcher.Common
@@ -25,16 +26,38 @@ namespace ManagerSearcher.Common
             return selectedFileName;
         }
 
+        private static string RemoveThrash(string data)
+        {
+            if (string.IsNullOrEmpty(data))
+            {
+                return string.Empty;
+            }
+            string result = string.Empty;
+            string newChar = string.Empty;
+            data = 
+                data.Replace("MBA", newChar)
+                    .Replace("PhD", newChar)
+                    .Replace("CPA", newChar)
+                    .Replace("Jr", newChar)
+                    .Replace("Sr", newChar)
+                    .Replace("MD", newChar)
+                    .Replace("CFA", newChar)
+                    .Replace(",", newChar)
+                    .Replace(".", newChar);
+            data = Regex.Replace(data, @"\s[I]{1,}", string.Empty);
+            data = Regex.Replace(data, @"(\s)([IV]{1,})(\b|\s)", string.Empty);
+            var res = data.Trim().Split(' ').ToList().Where(x => x.Length > 2);
+            var resData = string.Join(" ", res);
+            return resData;
+        }
+
         public static string GetMiddleAndSurname(string data)
         {
             if (string.IsNullOrEmpty(data))
             {
                 return string.Empty;
             }
-            if (data.Contains(','))
-            {
-                data = data.Substring(0, data.IndexOf(","));
-            }
+            data = RemoveThrash(data);
             var res = data.Trim().Split(' ');
             if (res.Length > 1)
             {

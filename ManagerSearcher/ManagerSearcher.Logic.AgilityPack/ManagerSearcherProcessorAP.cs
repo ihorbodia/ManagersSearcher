@@ -16,17 +16,20 @@ namespace ManagerSearcher.Logic.AgilityPack
         String excelFileName;
         String excelFilePath;
         ExcelPackage p;
+        bool searchByMiddles;
 
         List<Task> tasks;
 
-        public ManagerSearcherProcessorAP(string filePath)
+        public ManagerSearcherProcessorAP(string filePath, bool searchByMiddleNames)
         {
+            
             if (filePath.Contains("xlsx#"))
             {
                 Console.WriteLine("File Error");
             }
             else
             {
+                searchByMiddles = searchByMiddleNames;
                 tasks = new List<Task>();
                 excelFileName = new FileInfo(filePath).Name;
                 excelFilePath = new FileInfo(filePath).FullName;
@@ -126,7 +129,11 @@ namespace ManagerSearcher.Logic.AgilityPack
                     data,
                     description
                     );
-            return isSiteContainsName(sm, middleName) || isSiteContainsName(sm, surname);
+            if (searchByMiddles)
+            {
+                return isSiteContainsName(sm, middleName) || isSiteContainsName(sm, surname);
+            }
+            return isSiteContainsName(sm, surname);
         }
 
         private bool isSiteContainsName(SiteModelAG sm, string name)
