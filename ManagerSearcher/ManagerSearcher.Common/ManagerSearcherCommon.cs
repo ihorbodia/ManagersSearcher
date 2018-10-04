@@ -31,6 +31,10 @@ namespace ManagerSearcher.Common
             {
                 return string.Empty;
             }
+            if (data.Contains(','))
+            {
+                data = data.Substring(0, data.IndexOf(","));
+            }
             var res = data.Trim().Split(' ');
             if (res.Length > 1)
             {

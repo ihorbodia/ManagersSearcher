@@ -113,7 +113,8 @@ namespace ManagerSearcher.Logic.AgilityPack
             string description = desc.InnerHtml.Substring(desc.InnerHtml.LastIndexOf('>') + 1);
             Debug.WriteLine(description);
 
-            var managers = htmlDoc.DocumentNode.SelectNodes("//table[@class='nfvtTab linkTabBl']").FirstOrDefault(x => x.Attributes.Count < 5);
+            var managers = htmlDoc.DocumentNode.SelectNodes("//table[@class='nfvtTab linkTabBl']")
+                .FirstOrDefault(x => x.Attributes.Count < 6);
             IEnumerable<string> data = null;
             if (managers != null)
             {

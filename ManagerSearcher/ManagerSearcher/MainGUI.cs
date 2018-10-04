@@ -14,8 +14,9 @@ namespace ManagerSearcherMainGUI
         {
             InitializeComponent();
             StatusLabelText.Text = "Choose folder";
-            Text = "Manager searcher v1.3";
+            Text = "Manager searcher v1.5";
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            ChoosenPathLabel.AutoEllipsis = true;
         }
 
         private void ChooseFirstFolderButton_Click(object sender, System.EventArgs e)

@@ -39,10 +39,9 @@
             // 
             // ChoosenPathLabel
             // 
-            this.ChoosenPathLabel.AutoSize = true;
             this.ChoosenPathLabel.Location = new System.Drawing.Point(10, 31);
             this.ChoosenPathLabel.Name = "ChoosenPathLabel";
-            this.ChoosenPathLabel.Size = new System.Drawing.Size(0, 13);
+            this.ChoosenPathLabel.Size = new System.Drawing.Size(365, 13);
             this.ChoosenPathLabel.TabIndex = 12;
             this.ChoosenPathLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
