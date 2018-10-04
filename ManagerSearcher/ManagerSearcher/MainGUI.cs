@@ -16,6 +16,19 @@ namespace ManagerSearcherMainGUI
             StatusLabelText.Text = "Choose folder";
             Text = "Manager searcher v1.1";
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            backgroundWorker1.RunWorkerAsync();
+            backgroundWorker1.DoWork += BackgroundWorker1_DoWork;
+        }
+
+        private void BackgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            for (int i = 1; i <= 100; i++)
+            {
+                // Wait 100 milliseconds.
+                Thread.Sleep(100);
+                // Report progress.
+                backgroundWorker1.ReportProgress(i);
+            }
         }
 
         private void ChooseFirstFolderButton_Click(object sender, System.EventArgs e)
@@ -28,6 +41,8 @@ namespace ManagerSearcherMainGUI
             }
         }
 
+        
+
         private void ProcessFilesButton_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(chosenPath.Trim()))
@@ -36,6 +51,7 @@ namespace ManagerSearcherMainGUI
             }
             StatusLabelText.Text = "Processing";
             ProcessFilesButton.Enabled = false;
+            ProcessFilesButton.BeginInvoke((MethodInvoker)delegate () { ProcessFilesButton.Enabled = false; });
             try
             {
                 new Task(() =>
@@ -44,6 +60,7 @@ namespace ManagerSearcherMainGUI
                     t.Start();
                     t.Join();
                     StatusLabelText.BeginInvoke((MethodInvoker)delegate () { StatusLabelText.Text = "Finish"; });
+                    ProcessFilesButton.BeginInvoke((MethodInvoker)delegate () { ProcessFilesButton.Enabled = true; });
                     Console.WriteLine("Finish");
                 }).Start();
             }
@@ -51,12 +68,23 @@ namespace ManagerSearcherMainGUI
             {
                 StatusLabelText.Text = "Something wrong";
             }
-            ProcessFilesButton.Enabled = true;
         }
         private void RunProgram()
         {
             ManagerSearcherProcessorAP ms = new ManagerSearcherProcessorAP(chosenPath);
             ms.ProcessFileByEpp();
+            try
+            {
+                ms.SaveFile();
+            }
+            catch (InvalidOperationException ex)
+            {
+                DialogResult result = MessageBox.Show("Try to close excel file and click OK.", "Error while saving file", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                if (result == DialogResult.OK)
+                {
+                    ms.SaveFile();
+                }
+            }
         }
     }
 }

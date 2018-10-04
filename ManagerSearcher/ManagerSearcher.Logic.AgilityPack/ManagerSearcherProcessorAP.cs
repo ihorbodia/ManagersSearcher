@@ -14,6 +14,7 @@ namespace ManagerSearcher.Logic.AgilityPack
     {
         String excelFileName;
         String excelFilePath;
+        ExcelPackage p;
 
         List<Task> tasks;
 
@@ -36,42 +37,45 @@ namespace ManagerSearcher.Logic.AgilityPack
             FileInfo fi = new FileInfo(excelFilePath);
             if (fi.Exists)
             {
-                using (ExcelPackage p = new ExcelPackage(fi))
+                p = new ExcelPackage(fi);
+                ExcelWorksheet workSheet = p.Workbook.Worksheets["Feuil1"];
+                var start = workSheet.Dimension.Start.Row + 1;
+                var end = workSheet.Dimension.End.Row;
+                for (int row = start; row <= end; row++)
                 {
-                    ExcelWorksheet workSheet = p.Workbook.Worksheets["Feuil1"];
-                    var start = workSheet.Dimension.Start.Row + 1;
-                    var end = workSheet.Dimension.End.Row;
-                    for (int row = start; row <= end; row++)
+                    string names = workSheet.Cells[row, 3].Text;
+                    string URL = workSheet.Cells[row, 4].Text;
+                    if (string.IsNullOrEmpty(names))
                     {
-                        string names = workSheet.Cells[row, 3].Text;
-                        string URL = workSheet.Cells[row, 4].Text;
-                        if (string.IsNullOrEmpty(names))
-                        {
-                            break;
-                        }
-                        var data = ManagerSearcherCommon.GetMiddleAndSurname(names).Split(',');
-                        string middlename = data[0];
-                        string surname = data[1];
-                        object arg = row;
-                        tasks.Add(Task.Factory.StartNew(new Action<object>((argValue) =>
-                        {
-                            int num = Convert.ToInt32(argValue);
-                            Debug.WriteLine(num);
-                            if (isNFF(middlename, surname, URL))
-                            {
-                                workSheet.Cells[num, 6].Value = "NFF";
-                            }
-                            else
-                            {
-                                workSheet.Cells[num, 6].Value = "FF";
-                            }
-                        }), arg));
-                        
+                        break;
                     }
-                    Task.WaitAll(tasks.ToArray());
-                    p.Save();
+                    var data = ManagerSearcherCommon.GetMiddleAndSurname(names).Split(',');
+                    string middlename = data[0];
+                    string surname = data[1];
+                    object arg = row;
+                    tasks.Add(Task.Factory.StartNew(new Action<object>((argValue) =>
+                    {
+                        int num = Convert.ToInt32(argValue);
+                        Debug.WriteLine(num);
+                        if (isNFF(middlename, surname, URL))
+                        {
+                            workSheet.Cells[num, 6].Value = "NFF";
+                        }
+                        else
+                        {
+                            workSheet.Cells[num, 6].Value = "FF";
+                        }
+                    }), arg));
+
                 }
             }
+        }
+
+        public void SaveFile()
+        {
+            Task.WaitAll(tasks.ToArray());
+            p.Save();
+            p.Dispose();
         }
 
         private bool isNFF(string middleName, string surname, string URL)
