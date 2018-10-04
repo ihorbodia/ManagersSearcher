@@ -35,8 +35,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.ProcessFilesButton = new System.Windows.Forms.Button();
             this.ChooseFirstFolderButton = new System.Windows.Forms.Button();
-            this.ProgressBar = new System.Windows.Forms.ProgressBar();
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.SuspendLayout();
             // 
             // ChoosenPathLabel
@@ -60,7 +58,7 @@
             // StatusLabelText
             // 
             this.StatusLabelText.AutoSize = true;
-            this.StatusLabelText.Location = new System.Drawing.Point(12, 111);
+            this.StatusLabelText.Location = new System.Drawing.Point(12, 137);
             this.StatusLabelText.Name = "StatusLabelText";
             this.StatusLabelText.Size = new System.Drawing.Size(0, 13);
             this.StatusLabelText.TabIndex = 10;
@@ -68,7 +66,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 87);
+            this.label1.Location = new System.Drawing.Point(12, 113);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(40, 13);
             this.label1.TabIndex = 9;
@@ -94,19 +92,11 @@
             this.ChooseFirstFolderButton.UseVisualStyleBackColor = true;
             this.ChooseFirstFolderButton.Click += new System.EventHandler(this.ChooseFirstFolderButton_Click);
             // 
-            // ProgressBar
-            // 
-            this.ProgressBar.Location = new System.Drawing.Point(12, 140);
-            this.ProgressBar.Name = "ProgressBar";
-            this.ProgressBar.Size = new System.Drawing.Size(360, 20);
-            this.ProgressBar.TabIndex = 13;
-            // 
             // MainGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(384, 211);
-            this.Controls.Add(this.ProgressBar);
             this.Controls.Add(this.ChoosenPathLabel);
             this.Controls.Add(this.FolderChosenPath);
             this.Controls.Add(this.StatusLabelText);
@@ -129,8 +119,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button ProcessFilesButton;
         private System.Windows.Forms.Button ChooseFirstFolderButton;
-        private System.Windows.Forms.ProgressBar ProgressBar;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
 

@@ -14,21 +14,8 @@ namespace ManagerSearcherMainGUI
         {
             InitializeComponent();
             StatusLabelText.Text = "Choose folder";
-            Text = "Manager searcher v1.1";
+            Text = "Manager searcher v1.2";
             FormBorderStyle = FormBorderStyle.FixedSingle;
-            backgroundWorker1.RunWorkerAsync();
-            backgroundWorker1.DoWork += BackgroundWorker1_DoWork;
-        }
-
-        private void BackgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
-        {
-            for (int i = 1; i <= 100; i++)
-            {
-                // Wait 100 milliseconds.
-                Thread.Sleep(100);
-                // Report progress.
-                backgroundWorker1.ReportProgress(i);
-            }
         }
 
         private void ChooseFirstFolderButton_Click(object sender, System.EventArgs e)
@@ -40,8 +27,6 @@ namespace ManagerSearcherMainGUI
                 ChoosenPathLabel.Text = chosenPath;
             }
         }
-
-        
 
         private void ProcessFilesButton_Click(object sender, EventArgs e)
         {
