@@ -3,6 +3,7 @@ using ManagerSearcher.Common;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -39,6 +40,7 @@ namespace ManagerSearcher.Logic.AgilityPack
             {
                 p = new ExcelPackage(fi);
                 ExcelWorksheet workSheet = p.Workbook.Worksheets[1];
+                DataTable dt = new DataTable();
                 var start = workSheet.Dimension.Start.Row + 1;
                 var end = workSheet.Dimension.End.Row;
                 for (int row = start; row <= end; row++)
