@@ -14,7 +14,7 @@ namespace ManagerSearcherMainGUI
         {
             InitializeComponent();
             StatusLabelText.Text = "Choose folder";
-            Text = "Manager searcher v1.2";
+            Text = "Manager searcher v1.3";
             FormBorderStyle = FormBorderStyle.FixedSingle;
         }
 

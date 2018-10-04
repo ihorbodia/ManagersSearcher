@@ -38,7 +38,7 @@ namespace ManagerSearcher.Logic.AgilityPack
             if (fi.Exists)
             {
                 p = new ExcelPackage(fi);
-                ExcelWorksheet workSheet = p.Workbook.Worksheets["Feuil1"];
+                ExcelWorksheet workSheet = p.Workbook.Worksheets[1];
                 var start = workSheet.Dimension.Start.Row + 1;
                 var end = workSheet.Dimension.End.Row;
                 for (int row = start; row <= end; row++)
@@ -66,7 +66,6 @@ namespace ManagerSearcher.Logic.AgilityPack
                             workSheet.Cells[num, 6].Value = "FF";
                         }
                     }), arg));
-
                 }
             }
         }
