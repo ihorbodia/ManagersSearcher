@@ -14,7 +14,7 @@ namespace ManagerSearcherMainGUI
         {
             InitializeComponent();
             StatusLabelText.Text = "Choose folder";
-            Text = "Manager searcher v2.7";
+            Text = "Manager searcher v2.8";
             FormBorderStyle = FormBorderStyle.FixedSingle;
             ChoosenPathLabel.AutoEllipsis = true;
         }

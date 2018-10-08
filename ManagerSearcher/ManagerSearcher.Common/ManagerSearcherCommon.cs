@@ -41,7 +41,8 @@ namespace ManagerSearcher.Common
                     .Replace("Jr", newChar)
                     .Replace("Sr", newChar)
                     .Replace("MD", newChar)
-                    .Replace("CFA", newChar)
+					.Replace("family", newChar)
+					.Replace("CFA", newChar)
                     .Replace(",", newChar)
                     .Replace(".", newChar);
             data = Regex.Replace(data, @"\s[I]{1,}", string.Empty);
