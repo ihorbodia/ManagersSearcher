@@ -45,7 +45,7 @@ namespace ManagerSearcher.Common
 					.Replace("CFA", newChar)
                     .Replace(",", newChar)
                     .Replace(".", newChar);
-            data = Regex.Replace(data, @"\s[I]{1,}", string.Empty);
+            data = Regex.Replace(data, @"\s[I]{1,}\s", string.Empty);
             data = Regex.Replace(data, @"(\s)([IV]{1,})(\b|\s)", string.Empty);
             var res = data.Trim().Split(' ').ToList().Where(x => x.Length > 2);
             var resData = string.Join(" ", res);
