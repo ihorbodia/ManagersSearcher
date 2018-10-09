@@ -42,7 +42,7 @@
             // 
             // ChoosenPathLabel
             // 
-            this.ChoosenPathLabel.Location = new System.Drawing.Point(9, 49);
+            this.ChoosenPathLabel.Location = new System.Drawing.Point(6, 40);
             this.ChoosenPathLabel.Name = "ChoosenPathLabel";
             this.ChoosenPathLabel.Size = new System.Drawing.Size(408, 13);
             this.ChoosenPathLabel.TabIndex = 12;
@@ -51,7 +51,7 @@
             // FolderChosenPath
             // 
             this.FolderChosenPath.AutoSize = true;
-            this.FolderChosenPath.Location = new System.Drawing.Point(9, 25);
+            this.FolderChosenPath.Location = new System.Drawing.Point(6, 16);
             this.FolderChosenPath.Name = "FolderChosenPath";
             this.FolderChosenPath.Size = new System.Drawing.Size(63, 13);
             this.FolderChosenPath.TabIndex = 11;
@@ -96,11 +96,11 @@
             // SearchByMiddleNamesCB
             // 
             this.SearchByMiddleNamesCB.AutoSize = true;
-            this.SearchByMiddleNamesCB.Location = new System.Drawing.Point(255, 141);
+            this.SearchByMiddleNamesCB.Location = new System.Drawing.Point(273, 141);
             this.SearchByMiddleNamesCB.Name = "SearchByMiddleNamesCB";
-            this.SearchByMiddleNamesCB.Size = new System.Drawing.Size(159, 17);
+            this.SearchByMiddleNamesCB.Size = new System.Drawing.Size(141, 17);
             this.SearchByMiddleNamesCB.TabIndex = 13;
-            this.SearchByMiddleNamesCB.Text = "Search by middle names too";
+            this.SearchByMiddleNamesCB.Text = "Search by middle names";
             this.SearchByMiddleNamesCB.UseVisualStyleBackColor = true;
             // 
             // groupBox1
@@ -115,7 +115,6 @@
             this.groupBox1.Size = new System.Drawing.Size(420, 164);
             this.groupBox1.TabIndex = 14;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Details";
             // 
             // MainGUI
             // 

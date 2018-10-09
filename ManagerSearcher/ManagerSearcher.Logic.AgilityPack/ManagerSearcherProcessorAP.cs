@@ -59,6 +59,16 @@ namespace ManagerSearcher.Logic.AgilityPack
                     string middlename = data[0];
                     string surname = data[1];
                     object arg = row;
+                    //int num = Convert.ToInt32(row);
+                    //Debug.WriteLine(num);
+                    //if (isNFF(middlename, surname, URL))
+                    //{
+                    //    workSheet.Cells[num, 6].Value = "NFF";
+                    //}
+                    //else
+                    //{
+                    //    workSheet.Cells[num, 6].Value = "FF";
+                    //}
                     tasks.Add(Task.Factory.StartNew(new Action<object>((argValue) =>
                     {
                         int num = Convert.ToInt32(argValue);
