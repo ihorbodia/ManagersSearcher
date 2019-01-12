@@ -59,16 +59,6 @@ namespace ManagerSearcher.Logic.AgilityPack
                     string middlename = data[0];
                     string surname = data[1];
                     object arg = row;
-                    //int num = Convert.ToInt32(row);
-                    //Debug.WriteLine(num);
-                    //if (isNFF(middlename, surname, URL))
-                    //{
-                    //    workSheet.Cells[num, 6].Value = "NFF";
-                    //}
-                    //else
-                    //{
-                    //    workSheet.Cells[num, 6].Value = "FF";
-                    //}
                     tasks.Add(Task.Factory.StartNew(new Action<object>((argValue) =>
                     {
                         int num = Convert.ToInt32(argValue);
@@ -130,7 +120,14 @@ namespace ManagerSearcher.Logic.AgilityPack
                 return false;
             }
             var desc = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='std_txt' and @align='justify']");
-            string description = desc.InnerHtml.Substring(desc.InnerHtml.LastIndexOf('>') + 1);
+			int index = 0;
+			string description = string.Empty;
+			if (desc != null && desc.InnerHtml != null)
+			{
+				index = desc.InnerHtml.LastIndexOf('>') + 1;
+				description = desc.InnerHtml.Substring(index);
+			}
+
             Debug.WriteLine(description);
 
             var managers = htmlDoc.DocumentNode.SelectNodes("//table[@class='nfvtTab linkTabBl']")
