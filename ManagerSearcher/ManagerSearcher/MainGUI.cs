@@ -14,7 +14,7 @@ namespace ManagerSearcherMainGUI
         {
             InitializeComponent();
             StatusLabelText.Text = "Choose folder";
-            Text = "Manager searcher v2.9.10";
+            Text = "Manager searcher v2.9.11";
             FormBorderStyle = FormBorderStyle.FixedSingle;
             ChoosenPathLabel.AutoEllipsis = true;
         }
@@ -37,7 +37,8 @@ namespace ManagerSearcherMainGUI
             }
             StatusLabelText.Text = "Processing";
             ProcessFilesButton.BeginInvoke((MethodInvoker)delegate () { ProcessFilesButton.Enabled = false; });
-            SearchByMiddleNamesCB.BeginInvoke((MethodInvoker)delegate () { SearchByMiddleNamesCB.Enabled = false; });
+			ChooseFirstFolderButton.BeginInvoke((MethodInvoker)delegate () { ChooseFirstFolderButton.Enabled = false; });
+			SearchByMiddleNamesCB.BeginInvoke((MethodInvoker)delegate () { SearchByMiddleNamesCB.Enabled = false; });
             try
             {
                 new Task(() =>
@@ -47,7 +48,8 @@ namespace ManagerSearcherMainGUI
                     t.Join();
                     StatusLabelText.BeginInvoke((MethodInvoker)delegate () { StatusLabelText.Text = "Finish"; });
                     ProcessFilesButton.BeginInvoke((MethodInvoker)delegate () { ProcessFilesButton.Enabled = true; });
-                    SearchByMiddleNamesCB.BeginInvoke((MethodInvoker)delegate () { SearchByMiddleNamesCB.Enabled = true; });
+					ChooseFirstFolderButton.BeginInvoke((MethodInvoker)delegate () { ChooseFirstFolderButton.Enabled = true; });
+					SearchByMiddleNamesCB.BeginInvoke((MethodInvoker)delegate () { SearchByMiddleNamesCB.Enabled = true; });
                     Console.WriteLine("Finish");
                 }).Start();
             }

@@ -61,16 +61,24 @@ namespace ManagerSearcher.Logic.AgilityPack
                     object arg = row;
                     tasks.Add(Task.Factory.StartNew(new Action<object>((argValue) =>
                     {
-                        int num = Convert.ToInt32(argValue);
-                        Debug.WriteLine(num);
-                        if (isNFF(middlename, surname, URL))
-                        {
-                            workSheet.Cells[num, 6].Value = "NFF";
-                        }
-                        else
-                        {
-                            workSheet.Cells[num, 6].Value = "FF";
-                        }
+						try
+						{
+							int num = Convert.ToInt32(argValue);
+							Debug.WriteLine(num);
+							if (isNFF(middlename, surname, URL))
+							{
+								workSheet.Cells[num, 6].Value = "NFF";
+							}
+							else
+							{
+								workSheet.Cells[num, 6].Value = "FF";
+							}
+						}
+						catch (Exception ex)
+						{
+							Console.WriteLine(ex.StackTrace);
+						}
+                       
                     }), arg));
                 }
             }
@@ -130,8 +138,17 @@ namespace ManagerSearcher.Logic.AgilityPack
 
             Debug.WriteLine(description);
 
-            var managers = htmlDoc.DocumentNode.SelectNodes("//table[@class='nfvtTab linkTabBl']")
-                .FirstOrDefault(x => x.Attributes.Count < 6);
+			HtmlNode managers = null;
+			try
+			{
+				managers = htmlDoc.DocumentNode.SelectNodes("//table[@class='nfvtTab linkTabBl']")?
+					.FirstOrDefault(x => x.Attributes.Count < 6);
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex);
+			}
+
             IEnumerable<string> data = null;
             if (managers != null)
             {
